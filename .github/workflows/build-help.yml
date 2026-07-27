@@ -15,4 +15,5 @@ jobs:
 
       - name: Help
         run: |
+          chmod +x configure
           ./configure --help
