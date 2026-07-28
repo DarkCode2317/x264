@@ -58,6 +58,7 @@ export AS="$TOOLCHAIN/bin/llvm-as"
 export LD="$TOOLCHAIN/bin/ld"
 export RANLIB="$TOOLCHAIN/bin/llvm-ranlib"
 export STRIP="$TOOLCHAIN/bin/llvm-strip"
+export CFLAGS="-D_POSIX_C_SOURCE=200809L $CFLAGS"
 
 # Force configure detect Android libc correctly
 export ac_cv_func_fseeko=no
