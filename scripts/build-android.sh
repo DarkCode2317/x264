@@ -22,7 +22,7 @@ case "$ABI" in
 
 armeabi-v7a)
     TARGET=armv7a-linux-androideabi
-    HOST=arm-linux
+    HOST=arm-linux-androideabi
     EXTRA="--extra-cflags='-march=armv7-a -mfpu=neon -mfloat-abi=softfp'"
     ;;
 
@@ -58,6 +58,8 @@ export LD="$TOOLCHAIN/bin/ld"
 export RANLIB="$TOOLCHAIN/bin/llvm-ranlib"
 export STRIP="$TOOLCHAIN/bin/llvm-strip"
 export CFLAGS="-D__ANDROID__"
+export ac_cv_func_fseeko=no
+export ac_cv_func_ftello=no
 
 PREFIX="$ROOT/output/$ABI"
 
