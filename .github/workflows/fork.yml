@@ -1,0 +1,35 @@
+name: Fork x264 Branch
+
+on:
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: "Upstream branch (e.g. stable)"
+        required: true
+        default: "stable"
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout fork
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Add upstream
+        run: |
+          git remote add upstream https://github.com/mirror/x264.git
+          git fetch upstream --prune
+
+      - name: Create/update branch
+        run: |
+          git checkout -B "${{ inputs.branch }}" "upstream/${{ inputs.branch }}"
+
+      - name: Push to fork
+        run: |
+          git push origin "${{ inputs.branch }}" --force
