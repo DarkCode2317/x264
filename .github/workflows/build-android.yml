@@ -1,0 +1,78 @@
+name: Build x264 Android
+
+on:
+
+  workflow_dispatch:
+
+    inputs:
+
+      abi:
+        description: Target ABI
+        required: true
+        default: all
+        type: choice
+
+        options:
+          - all
+          - armeabi-v7a
+          - arm64-v8a
+          - x86
+          - x86_64
+
+      api:
+        description: Android API
+        required: true
+        default: "21"
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - uses: actions/checkout@v4
+
+      - uses: nttld/setup-ndk@v1
+        with:
+          ndk-version: r27c
+
+      - run: chmod +x scripts/build-android.sh
+
+      - name: Build selected ABI
+        if: github.event.inputs.abi != 'all'
+        run: |
+          ./scripts/build-android.sh \
+          "${{ github.event.inputs.abi }}" \
+          "${{ github.event.inputs.api }}"
+
+      - name: Build all
+        if: github.event.inputs.abi == 'all'
+        run: |
+
+          for ABI in \
+              armeabi-v7a \
+              arm64-v8a \
+              x86 \
+              x86_64
+          do
+              ./scripts/build-android.sh \
+                  "$ABI" \
+                  "${{ github.event.inputs.api }}"
+          done
+
+      - name: Package
+
+        run: |
+
+          cd output
+
+          for ABI in *; do
+            zip -r "${ABI}.zip" "ABI"
+          done
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: x264-android
+          path: output/*.zip
