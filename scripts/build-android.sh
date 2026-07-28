@@ -21,9 +21,10 @@ TOOLCHAIN="$ANDROID_NDK_ROOT/toolchains/llvm/prebuilt/linux-x86_64"
 case "$ABI" in
 
 armeabi-v7a)
-    TARGET=armv7a-linux-androideabi
+    TARGET=armv7a-linux
     HOST=arm-linux-androideabi
     EXTRA="--extra-cflags='-march=armv7-a -mfpu=neon -mfloat-abi=softfp'"
+    export CFLAGS="-march=armv7-a -mfpu=neon -mfloat-abi=softfp"
     ;;
 
 arm64-v8a)
@@ -57,13 +58,16 @@ export AS="$TOOLCHAIN/bin/llvm-as"
 export LD="$TOOLCHAIN/bin/ld"
 export RANLIB="$TOOLCHAIN/bin/llvm-ranlib"
 export STRIP="$TOOLCHAIN/bin/llvm-strip"
-export CFLAGS="-D__ANDROID__"
+
+# Force configure detect Android libc correctly
 export ac_cv_func_fseeko=no
 export ac_cv_func_ftello=no
 
 PREFIX="$ROOT/output/$ABI"
 
 make distclean || true
+
+rm -f config.h config.mak config.status
 
 ./configure \
     --host="$HOST" \
@@ -72,12 +76,7 @@ make distclean || true
     --enable-static \
     --enable-shared \
     --enable-pic \
-    --disable-cli \
-    --extra-cflags="$CFLAGS"
+    --disable-cli
 
 make -j"$(nproc)"
 make install
-
-echo
-echo "Done!"
-echo "$PREFIX"
