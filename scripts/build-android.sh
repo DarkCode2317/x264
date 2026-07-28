@@ -21,8 +21,8 @@ TOOLCHAIN="$ANDROID_NDK_ROOT/toolchains/llvm/prebuilt/linux-x86_64"
 case "$ABI" in
 
 armeabi-v7a)
-    TARGET=armv7a-linux
-    HOST=arm-linux-androideabi
+    TARGET=armv7a-linux-android
+    HOST=arm-linux
     EXTRA="--extra-cflags='-march=armv7-a -mfpu=neon -mfloat-abi=softfp'"
     export CFLAGS="-march=armv7-a -mfpu=neon -mfloat-abi=softfp"
     ;;
