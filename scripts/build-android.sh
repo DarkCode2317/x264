@@ -53,8 +53,8 @@ esac
 export CC="$TOOLCHAIN/bin/${TARGET}${API}-clang"
 export CXX="$TOOLCHAIN/bin/${TARGET}${API}-clang++"
 export AR="$TOOLCHAIN/bin/llvm-ar"
-export AS="$TOOLCHAIN/bin/llvm-as"
-export LD="$TOOLCHAIN/bin/ld"
+export AS="$CC"
+export LD="$CC"
 export RANLIB="$TOOLCHAIN/bin/llvm-ranlib"
 export STRIP="$TOOLCHAIN/bin/llvm-strip"
 
