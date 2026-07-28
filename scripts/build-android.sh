@@ -57,6 +57,7 @@ export AS="$TOOLCHAIN/bin/llvm-as"
 export LD="$TOOLCHAIN/bin/ld"
 export RANLIB="$TOOLCHAIN/bin/llvm-ranlib"
 export STRIP="$TOOLCHAIN/bin/llvm-strip"
+export CFLAGS="-D__ANDROID__"
 
 PREFIX="$ROOT/output/$ABI"
 
@@ -69,7 +70,8 @@ make distclean || true
     --enable-static \
     --enable-shared \
     --enable-pic \
-    --disable-cli
+    --disable-cli \
+    --extra-cflags="$CFLAGS"
 
 make -j"$(nproc)"
 make install
